@@ -23,8 +23,18 @@ boardHard = np.array([[0,2,0,0,0,0,0,0,0],
 	[5,0,0,0,0,9,0,0,0],
 	[0,0,0,0,0,0,0,4,0]])
 
+boardWrong = np.array([[0,2,0,0,0,0,0,0,0],
+	[0,0,0,6,0,0,0,0,3],
+	[0,7,4,0,8,0,0,0,0],
+	[0,0,0,0,0,3,0,0,2],
+	[0,8,0,0,4,0,0,1,0],
+	[6,0,0,5,0,0,0,0,0],
+	[0,0,0,0,1,0,7,8,0],
+	[5,0,0,0,0,9,4,0,0],
+	[0,0,0,0,0,0,0,4,0]])
 
-def solve(board):
+
+def easySolve(board):
 	notSolved = True
 
 	while notSolved:
@@ -47,6 +57,7 @@ def solve(board):
 					notSolved = True
 	print(board)
 	
+
 
 
 
@@ -79,4 +90,34 @@ def checkSquare(board, x, y):
 			possibles.append(i)
 	return possibles
 
-solve(boardHard)
+def checkIntegrity(board):
+	for i in np.arange(9):
+		row = board[i].tolist()
+		row = [i for i in row if i != 0]
+		column = board[:, i].tolist()
+		column = [i for i in column if i != 0]
+		if len(set(column)) != len(column) or len(set(row)) != len(row):
+			return False
+
+		for j in np.arange(9):
+			squareX = (i // 3) * 3
+			squareY = (j // 3) * 3
+			subArray = board[squareX:squareX+3,squareY:squareY+3]
+			square = subArray.flatten().tolist()
+			square = [i for i in square if i != 0]
+			if len(set(square)) != len(square):
+				return False
+	
+	return True
+
+
+			
+
+
+
+
+
+#easySolve(boardEasy)
+
+print(checkIntegrity(boardHard))
+print(checkIntegrity(boardWrong))
