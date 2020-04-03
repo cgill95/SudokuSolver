@@ -56,27 +56,24 @@ def easySolve(board):
 						board[i][j] = possibles[0]
 					notSolved = True
 	print(board)
-	
-
-
 
 
 def checkHorizontal(board, x):
 	row = set(board[x])
 	row.remove(0)
 	possibles = []
-	for i in np.arange(1, 10):
-		if i not in row:
-			possibles.append(i)
+	for a in np.arange(1, 10):
+		if a not in row:
+			possibles.append(a)
 	return possibles
 
 def checkVertical(board, y):
 	column = set(board[:, y])
 	column.remove(0)
 	possibles = []
-	for i in np.arange(1, 10):
-		if i not in column:
-			possibles.append(i)
+	for b in np.arange(1, 10):
+		if b not in column:
+			possibles.append(b)
 	return possibles
 
 def checkSquare(board, x, y):
@@ -85,18 +82,23 @@ def checkSquare(board, x, y):
 	subArray = board[squareX:squareX+3,squareY:squareY+3]
 	square = set(subArray.flatten())
 	possibles = []
-	for i in np.arange(1, 10):
-		if i not in square:
-			possibles.append(i)
+	for c in np.arange(1, 10):
+		if c not in square:
+			possibles.append(c)
 	return possibles
 
 def checkIntegrity(board):
 	for i in np.arange(9):
 		row = board[i].tolist()
 		row = [i for i in row if i != 0]
+
 		column = board[:, i].tolist()
 		column = [i for i in column if i != 0]
-		if len(set(column)) != len(column) or len(set(row)) != len(row):
+
+		if (len(set(column)) != len(column)):
+			return False
+
+		if (len(set(row)) != len(row)):
 			return False
 
 		for j in np.arange(9):
@@ -110,14 +112,37 @@ def checkIntegrity(board):
 	
 	return True
 
+def find_zero(board):
+	for i in np.arange(9):
+		for j in np.arange(9):
+			if board[i][j] == 0:
+				return i,j
+	return None
 
-			
+def backTrackSolve(board):
 
 
+	zeros = find_zero(board)
+	if not zeros:
+		return True
+	else:
+		i,j = zeros
 
+	for num in np.arange(1,10):
+		board[i][j] = num
+		
+		if checkIntegrity(board):
+			#print(board)
 
+			if backTrackSolve(board):
+				print(board)
+				return True
+
+		board[i][j] = 0
+
+	return False
 
 #easySolve(boardEasy)
-
-print(checkIntegrity(boardHard))
-print(checkIntegrity(boardWrong))
+#print(boardEasy)
+backTrackSolve(boardHard)
+#print(backTrackSolve(boardHard))
