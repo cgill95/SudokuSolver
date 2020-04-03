@@ -13,6 +13,16 @@ boardEasy = np.array([[0,0,0,2,6,0,7,0,1],
 	[0,4,0,0,5,0,0,3,6],
 	[7,0,3,0,1,8,0,0,0]])
 
+boardDifficult = np.array([[0,0,0,6,0,0,4,0,0],
+	[7,0,0,0,0,3,6,0,0],
+	[0,0,0,0,9,1,0,8,0],
+	[0,0,0,0,0,0,0,0,0],
+	[0,5,0,1,8,0,0,0,3],
+	[0,0,0,3,0,6,0,4,5],
+	[0,4,0,2,0,0,0,6,0],
+	[9,0,3,0,0,0,0,0,0],
+	[0,2,0,0,0,0,1,0,0]])
+
 boardHard = np.array([[0,2,0,0,0,0,0,0,0],
 	[0,0,0,6,0,0,0,0,3],
 	[0,7,4,0,8,0,0,0,0],
@@ -42,17 +52,15 @@ def easySolve(board):
 
 		for i in np.arange(9):
 			for j in np.arange(9):
-				#print(i,j)
+
 				if board[i][j] == 0:
 					possibleHorizontals = checkHorizontal(board, i)
 					possibleVerticals = checkVertical(board, j)
 					possibleSquare = checkSquare(board,i,j)
-					#print(possibleVerticals)
-					#print(possibleHorizontals)
+
 					possibles = list( set(possibleVerticals) & set(possibleHorizontals) & set(possibleSquare))
-					#print(possibles)
+
 					if len(possibles) == 1:
-						#print(possibles[0])
 						board[i][j] = possibles[0]
 					notSolved = True
 	print(board)
@@ -121,10 +129,11 @@ def find_zero(board):
 
 def backTrackSolve(board):
 
-
 	zeros = find_zero(board)
 	if not zeros:
+		print(board)
 		return True
+		
 	else:
 		i,j = zeros
 
@@ -132,17 +141,13 @@ def backTrackSolve(board):
 		board[i][j] = num
 		
 		if checkIntegrity(board):
-			#print(board)
 
 			if backTrackSolve(board):
-				print(board)
 				return True
 
 		board[i][j] = 0
 
 	return False
 
-#easySolve(boardEasy)
-#print(boardEasy)
 backTrackSolve(boardHard)
-#print(backTrackSolve(boardHard))
+
